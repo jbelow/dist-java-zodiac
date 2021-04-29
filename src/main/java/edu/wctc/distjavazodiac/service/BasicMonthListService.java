@@ -1,7 +1,9 @@
 package edu.wctc.distjavazodiac.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.wctc.distjavazodiac.entity.Month;
+import edu.wctc.distjavazodiac.repo.MonthRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -13,22 +15,30 @@ import java.util.List;
 
 @Service
 public class BasicMonthListService implements MonthListService {
-    private List<Month> monthList;
+//    private List<Month> monthList;
+//
+//    @Override
+//    public List<Month> getMonths() {
+//        return monthList;
+//    }
+
+    @Autowired
+    private MonthRepository monthRepository;
 
     @Override
     public List<Month> getMonths() {
-        return monthList;
+        List<Month> month = new ArrayList<>();
+        monthRepository.findAll().forEach(month::add);
+        return month;
     }
 
-    @PostConstruct
-    public void initMonths() {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            Month[] monthArray = mapper.readValue(Paths.get("months.json").toFile(), Month[].class);
-            monthList = Arrays.asList(monthArray);
-        } catch (IOException e) {
-            e.printStackTrace();
-            monthList = new ArrayList<>(0);
-        }
-    }
+//    @Autowired
+//    private LocationRepository locationRepository;
+//
+//    @Override
+//    public List<Location> getLocationList() {
+//        List<Location> list = new ArrayList<>();
+//        locationRepository.findAllByOrderByCountryAscName().forEach(list::add);
+//        return list;
+//    }
 }
